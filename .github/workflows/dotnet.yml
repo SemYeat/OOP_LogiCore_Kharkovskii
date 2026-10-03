@@ -1,0 +1,38 @@
+name: Проверка LogiCore
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-demo:
+    name: Сборка тесты и демо
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Получение файлов проекта
+        uses: actions/checkout@v7
+
+      - name: Установка .NET 8
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Восстановление зависимостей
+        run: dotnet restore LogiCore.sln --configfile NuGet.Config
+
+      - name: Сборка решения
+        run: dotnet build LogiCore.sln --configuration Release --no-restore
+
+      - name: Запуск тестов
+        run: dotnet test LogiCore.Tests/LogiCore.Tests.csproj --configuration Release --no-build --no-restore --verbosity normal
+
+      - name: Запуск демонстрационного сценария
+        run: dotnet run --project LogiCore.App/LogiCore.App.csproj --configuration Release --no-build -- --demo-only
