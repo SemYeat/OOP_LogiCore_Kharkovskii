@@ -1,0 +1,40 @@
+@startuml
+skinparam classAttributeIconSize 0
+abstract class Vehicle
+class Truck
+class RefrigeratorTruck
+class CargoPlane
+class CargoShip
+class DroneCourier
+interface IRefrigeratedTransport
+Vehicle <|-- Truck
+Truck <|-- RefrigeratorTruck
+Vehicle <|-- CargoPlane
+Vehicle <|-- CargoShip
+Vehicle <|-- DroneCourier
+IRefrigeratedTransport <|.. RefrigeratorTruck
+
+abstract class Cargo
+class StandardCargo
+class PerishableCargo
+class FragileCargo
+class DangerousCargo
+class OversizedCargo
+Cargo <|-- StandardCargo
+Cargo <|-- PerishableCargo
+Cargo <|-- FragileCargo
+Cargo <|-- DangerousCargo
+Cargo <|-- OversizedCargo
+
+Customer "1" -- "*" Order
+Order "1" o-- "*" Cargo
+Order "1" --> "0..1" Vehicle
+Order "1" --> "1" Route
+DeliveryService --> Order
+DeliveryService --> Vehicle
+DeliveryService --> CargoCompatibilityValidator
+DeliveryService --> ITariffStrategy
+IDeliveryCost <|.. BasicDeliveryCost
+IDeliveryCost <|.. DeliveryCostDecorator
+StateStorage --> SystemSnapshot
+@enduml

@@ -1,0 +1,8 @@
+bin/
+obj/
+.idea/
+*.user
+*.suo
+TestResults/
+logs/
+state.json
